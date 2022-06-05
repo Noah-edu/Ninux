@@ -159,7 +159,6 @@ int main(void)
 	//VGA_INDEX = 0 (Normal)
 	//VGA_INDEX = 80 (NEW LINE)
 	
-	laihost_map(ptr,1);
 
 	terminal_buffer = (unsigned short*)VGA_ADDRESS;
 	vga_index = 0;
@@ -168,7 +167,7 @@ int main(void)
 
 	newln;
 
-	print_string(ptr.c_str(),WHITE);
+	count_memory();
 
 	newln;
 

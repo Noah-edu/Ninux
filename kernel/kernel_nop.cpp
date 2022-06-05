@@ -158,10 +158,7 @@ int main(void)
 	
 	//VGA_INDEX = 0 (Normal)
 	//VGA_INDEX = 80 (NEW LINE)
-	unsigned short *ptr;
-
-	ptr = &terminal_buffer;
-
+	
 	laihost_map(ptr,1);
 
 	terminal_buffer = (unsigned short*)VGA_ADDRESS;

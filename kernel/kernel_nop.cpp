@@ -3,6 +3,12 @@
 //#include"run_cmd.h"
 //#include"run_cmd.cpp"
 
+void print_string(const char*,unsigned char);
+
+#ifndef __linux__
+print_string("Must be compiled on linux!",RED);
+#endif
+
 //Colours
 #define BLACK 0
 #define GREEN 2
@@ -12,11 +18,6 @@
 
 
 
-void print_string(const char*,unsigned char);
-
-
-#ifndef __linux__
-print_string("Must be compiled on linux!",RED);
 
 
 void count_memory(void)
@@ -160,6 +161,8 @@ int main(void)
 	//VGA_INDEX = 80 (NEW LINE)
 	
 
+	laihost_map(ptr,1);
+
 	terminal_buffer = (unsigned short*)VGA_ADDRESS;
 	vga_index = 0;
 	clear_terminal();
@@ -167,12 +170,9 @@ int main(void)
 
 	newln;
 
-	count_memory();
-
-	newln;
 
 	print_string(vga_index.c_str(),WHITE);
-	
+
 	while(true)
 	{
 //waitingCommand();

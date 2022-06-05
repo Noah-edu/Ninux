@@ -172,9 +172,8 @@ int main(void)
 
 	newln;
 
-	ptr = &vga_index;
 	print_string(vga_index.c_str(),WHITE);
-	delete ptr;
+	
 	while(true)
 	{
 //waitingCommand();

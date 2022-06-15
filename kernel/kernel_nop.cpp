@@ -1,7 +1,5 @@
-//#include<ctime>
-//#include"os_init.h"
-//#include"run_cmd.h"
-//#include"run_cmd.cpp"
+
+#include "io.h"
 
 void print_string(const char*,unsigned char);
 

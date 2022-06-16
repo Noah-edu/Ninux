@@ -1,4 +1,5 @@
 #include<stdint.h>
+#include<cstddef>
 #include<string>
 print_string(const char*, unsigned char);
 #ifndef __linux__
@@ -42,15 +43,6 @@ int __attribute__((noinline)) __attribute__((regparm(3))) detectMemory(SMAP_entr
 #define YELLOW 14
 #define WHITE_COLOUR 15
 
-
-
-
-
-
-void * laihost_map(size_t addr,size_t count)
-{
-return (void*)(addr + count);
-}
 
 //new line
 #define newln vga_index += 80
@@ -138,7 +130,7 @@ int main(void)
 	
 	vga_index = 80;
 	
-	print_string(std::to_string(entry_count),WHITE);
+	print_string(std::to_string(entry_count).c_str(),WHITE_COLOUR);
 
 	while(true)
 	{

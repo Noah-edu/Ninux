@@ -1,4 +1,6 @@
-
+#include<stdint.h>
+#include<string>
+print_string(const char*, unsigned char);
 #ifndef __linux__
 print_string("Must be compiled on linux!",RED);
 #endif
@@ -88,8 +90,9 @@ __asm__
 );
 i++;
 }
-*/
+
 }
+*/
 //Prints a string with a colour
 void print_string(const char* str, unsigned char colour)
 {

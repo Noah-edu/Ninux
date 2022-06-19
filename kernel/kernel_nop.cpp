@@ -32,7 +32,7 @@ int __attribute__((noinline)) __attribute__((regparm(3))) detectMemory(SMAP_entr
 			buffer++;
 			entries++;
 		}
-	}while(contID != && entries < maxentries);
+	}while(contID != 0 && entries < maxentries);
 	return entries;
 }
 

@@ -1,9 +1,11 @@
 #include<stdint.h>
 #include<cstddef>
 #include<string>
+int exit;
 print_string(const char*, unsigned char);
 #ifndef __linux__
 print_string("Must be compiled on linux!",RED);
+goto exit;
 #endif
 
 typedef struct SMAP_entry
@@ -139,3 +141,4 @@ int main(void)
 
 	return 0;
 }
+exit:;

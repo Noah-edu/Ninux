@@ -1,6 +1,6 @@
-#include<stdint.h>
-#include<cstddef>
-#include<string>
+#include<cstdint>
+
+
 
 
 
@@ -102,6 +102,19 @@ void print_string(const char* str, unsigned char colour)
 	}
 }
 
+void print_string(int* str, unsigned char colour)
+{
+	
+	for (int i = 0; str[i];) 
+	{
+			
+		terminal_buffer[vga_index] = (unsigned short)str[i] | (unsigned short)colour << 8;
+		i++;
+		vga_index++;
+		
+	}
+}
+
 //Main (referenced in boot.asm)
 int main(void)
 {
@@ -127,7 +140,7 @@ int main(void)
 	
 	vga_index = 80;
 	
-	print_string(std::to_string(entry_count).c_str(),WHITE_COLOUR);
+	print_string(&entry_count,WHITE_COLOUR);
 
 	while(true)
 	{

@@ -1,12 +1,9 @@
 #include<stdint.h>
 #include<cstddef>
 #include<string>
-int exit;
-print_string(const char*, unsigned char);
-#ifndef __linux__
-print_string("Must be compiled on linux!",RED);
-goto exit;
-#endif
+
+
+
 
 typedef struct SMAP_entry
 {
@@ -71,7 +68,6 @@ for(int i = 0; i < 25*80*2;)
 
 /*void get_Input(char* str, int length)
 {
-
 for(int i = 0;i < length;)
 {
 __asm__
@@ -84,7 +80,6 @@ __asm__
 );
 i++;
 }
-
 }
 */
 //Prints a string with a colour
@@ -117,7 +112,7 @@ int main(void)
 	SMAP_entry_t* smap = (SMAP_entry_t*) 0x1000;
 	const int smap_size = 0x2000;
 	
-	int entry_count = detectMemory(smap,smap_size / sizeof(SMAP_entry_t))
+	int entry_count = detectMemory(smap,smap_size / sizeof(SMAP_entry_t));
 	
 		if(entry_count == -1)
 		{
@@ -141,4 +136,5 @@ int main(void)
 
 	return 0;
 }
-exit:;
+
+

@@ -16,6 +16,20 @@
 
 #define UCHAR unsigned char
 
+
+void outportb(uint16_t port, uint8_t value){
+	asm volatile ("outb %1, %0" : : "dN" (port), "a" (value));
+}
+
+uint8_t inportb(uint16_t port)
+{
+  uint8_t ret;
+  asm volatile ("inb %1, %0" : "=a" (ret) : "Nd" (port));
+  return ret;
+}
+
+
+
 enum vga_colour 
 {
 	VGA_COLOUR_BLACK = 0,
@@ -29,6 +43,8 @@ enum vga_colour
 	VGA_COLOUR_WHITE = 15,
 };
 
+
+// memory allocation
 void malloc(int x,unsigned int bytes)
 {
 
@@ -85,12 +101,13 @@ void terminal_init(void)
 
 }
 
-
 void terminal_setcolour(uint8_t colour)
 {
 	terminal_colour = colour;
 }
 
+
+//terminal writes
 
 void terminal_putentryat(char c, uint8_t colour, size_t x, size_t y)\
 {
@@ -168,7 +185,90 @@ void terminal_writestring(const char* data){
 void terminal_writestring(char* data){
 	terminal_write(data, strlen(data));
 }
+/*
+===============*
+KEYBOARD DRIVER|
+===============*
+*/
+enum KYBRD_ENCODER_IO
+{
+	KYBRD_ENC_INPUT_BUF = 0x60,
+	KYBRD_END_CMD_REG = 0x60
+};
 
+enum KYBRD_CTRL_IO
+{
+	KYBRD_CTRL_STATS_REG = 0x64,
+	KYBRD_CTRL_CMD_REG = 0x64
+};
+
+enum KYBRD_CTRL_STATS_MASK{
+
+	KYBRD_CTRL_STATS_MASK_OUT_BUF = 1,
+	KYBRD_CTRL_STATS_MASK_IN_BUF = 2,
+	KYBRD_CTRL_STATS_MASK_SYSTEM = 4,
+	KYBRD_CTRL_STATS_MASK_CMD_DATA = 8,
+	KYBRD_CTRL_STATS_MASK_LOCKED  = 0x10,
+        KYBRD_CTRL_STATS_MASK_AUX_BUF = 0x20,
+	KYBRD_CTRL_STATS_MASK_TIMEOUT = 0x40,
+	KYBRD_CTRL_STATS_MASK_PARITY = 0x80	
+
+};
+
+uint8_t kybrd_ctrl_read_status(){
+	return inportb(KYBRD_CTRL_STATS_REG);
+}
+
+void kybrd_ctrl_send_cmd(uint8_t cmd)
+{
+    // wait for keyboard controller input to be clear
+    while(1)
+    {
+	 if((kybrd_ctrl_read_status() && KYBRD_CTRL_STATS_MASK_IN_BUF) == 0)
+		 break;
+    }
+    outportb(KYBRD_CTRL_CMD_REG, cmd);
+}
+// read keyboard encoder buffer
+uint8_t kybrd_end_read_buf(){
+	return inportb(KYBRD_ENC_INPUT_BUF);
+}
+
+void kybrd_enc_send_cmd(uint8_t cmd)
+{
+     while(1)
+     {
+	  if((kybrd_ctrl_read_status() && KYBRD_CTRL_STATS_MASK_IN_BUF) == 0)
+		  break;
+     }
+     outportb(KYBRD_END_CMD_REG, cmd);
+}
+
+//Testing whether it is operational
+
+bool kybrd_self_test()
+{
+   kybrd_ctrl_send_cmd(0xAA);
+   
+   while(1)
+   {
+	   
+   	if(kybrd_ctrl_read_status() && KYBRD_CTRL_STATS_MASK_OUT_BUF)
+		break;
+   }
+
+   
+   if(inportb(0x60) == 0x55)
+   {
+   return true;
+   }
+   return false;
+}
+
+//END OF KEYBOARD DRIVER
+
+
+//uint8_t to string
 char* uint8_toString(uint8_t value, char* str, int base )
 {
 	char* rc;
@@ -203,19 +303,10 @@ char* uint8_toString(uint8_t value, char* str, int base )
 		*low++ = *ptr;
 		*ptr-- = tmp;
 	}
+
 }
 
-void outportb(uint16_t port, uint8_t value){
-	asm volatile ("outb %1, %0" : : "dN" (port), "a" (value));
-}
-
-uint8_t inportb(uint16_t port)
-{
-  uint8_t ret;
-  asm volatile ("inb %1, %0" : "=a" (ret) : "Nd" (port));
-  return ret;
-}
-
+ //memory counter
 uint8_t CMOS()
 {	
    uint8_t total;
@@ -232,25 +323,29 @@ uint8_t CMOS()
 
 int main(void)
 {
-	char* str;
+	char* buffer;
   terminal_init();
-  terminal_setcolour(VGA_COLOUR_RED);
- //uint8_t lowmem = inportb(0x71);
- // uint8_t highmem = inportb(0x71);
+  terminal_setcolour(VGA_COLOUR_GREEN);
+  
+  uint8_toString(CMOS(),buffer,10);
 
-  uint8_t mem = CMOS();
-  char* memc;
-  uint8_toString(mem,memc,10);
- // terminal_writestring("Boot succesful\n\n");
- //terminal_writestring("\nLow mem:\t0x");
-  terminal_writestring(memc);
- // terminal_writestring("\nHigh mem:\t0x");
- 
+  terminal_writestring("Boot succesful\n\n");
+  terminal_writestring("\nTotal mem:\t0x");
+  
+  terminal_writestring(buffer);
+
+  terminal_writestring("\n\n");
+  
+ /*if(kybrd_self_test() == 1)
+  {
+  terminal_writestring("true! :3");
+  }
+*/
   //RGB showcase
   terminal_putentryat(219,VGA_COLOUR_RED,75,20);
   terminal_putentryat(219,VGA_COLOUR_GREEN,76,20);
   terminal_putentryat(219,VGA_COLOUR_BLUE,77,20);
- //inportb(0x60);
+  
  
  
 //terminal_writestring(x);

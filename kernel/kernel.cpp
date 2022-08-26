@@ -4,9 +4,9 @@
 
 
 
-//#ifdef __linux__
-//#error "Must be compiled with a cross-compiler"
-//#endif
+#ifndef __linux__
+#error "Must be compiled with a cross-compiler"
+#endif
 
 
 
@@ -264,6 +264,7 @@ bool kybrd_self_test()
    }
    return false;
 }
+
 
 //END OF KEYBOARD DRIVER
 

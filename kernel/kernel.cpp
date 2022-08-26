@@ -257,6 +257,7 @@ bool kybrd_self_test()
 		break;
    }
 
+	// Output buffer (WORK IN PROGRESS)
    outportb(0,0x60);
    if(inportb(0x60) == 0x55)
    {

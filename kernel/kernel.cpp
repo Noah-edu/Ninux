@@ -257,7 +257,7 @@ bool kybrd_self_test()
 		break;
    }
 
-   outportb(0x60)
+   outportb(0,0x60);
    if(inportb(0x60) == 0x55)
    {
    return true;

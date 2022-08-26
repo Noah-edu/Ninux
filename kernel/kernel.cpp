@@ -257,7 +257,7 @@ bool kybrd_self_test()
 		break;
    }
 
-   
+   outportb(0x60)
    if(inportb(0x60) == 0x55)
    {
    return true;
@@ -316,7 +316,7 @@ uint8_t CMOS()
    lowmem = inportb(0x71);
    outportb(0x70, 0x31);
    highmem = inportb(0x71);
-
+   
    total = lowmem | highmem << 8;
    return total;
 }

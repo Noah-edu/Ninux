@@ -257,8 +257,11 @@ bool kybrd_self_test()
 		break;
    }
 
-   
-   if(inportb(0x60) == 0x55)
+  
+   outportb(0,0x60);
+   uint8_t outputbuf = inportb(0x60);
+	
+   if( outputbuf == 0x55)
    {
    return true;
    }

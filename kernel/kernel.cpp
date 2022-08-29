@@ -214,6 +214,35 @@ enum KYBRD_CTRL_STATS_MASK{
 	KYBRD_CTRL_STATS_MASK_PARITY = 0x80	
 
 };
+enum KEYCODE
+{
+	
+KEY_0 = '0',
+KEY_1 = '1',
+KEY_2 = '2',
+KEY_3 = '3',
+KEY_4 = '4',
+KEY_5 = '5',
+KEY_6 = '6',
+KEY_7 = '7',
+KEY_8 = '8',
+KEY_9 = '9'
+
+};
+
+int _kyybrd_scancode_std[]
+{
+ KEY_0, // 0
+ KEY_1, // 1
+ KEY_2, // 2
+ KEY_3, // 3
+ KEY_4, // 4
+ KEY_5, // 5
+ KEY_6, // 6
+ KEY_7, // 7
+ KEY_8, // 8
+ KEY_9  // 9
+};
 
 uint8_t kybrd_ctrl_read_status(){
 	return inportb(KYBRD_CTRL_STATS_REG);
